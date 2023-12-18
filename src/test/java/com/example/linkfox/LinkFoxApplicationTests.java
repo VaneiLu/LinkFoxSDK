@@ -1,6 +1,8 @@
 package com.example.linkfox;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.linkfox.req.ImageToImageReq;
+import com.example.linkfox.req.ImageToPromptReq;
 import com.example.linkfox.req.OnlyIdReq;
 import com.example.linkfox.req.PromptToImageReq;
 import com.fzzixun.openapi.sdk.client.OpenClient;
@@ -11,7 +13,6 @@ import com.fzzixun.openapi.sdk.response.AppTokenResponse;
 import com.fzzixun.openapi.sdk.response.CommonResponse;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 
 class LinkFoxApplicationTests {
 
@@ -46,7 +47,8 @@ class LinkFoxApplicationTests {
             "/psslMudMUwKBgQDB1PKu9ue7WrJgs+P3BWORDOak1NlbzCqriGkiuOL4B4IDnqPbeBdkfmyH+D5B6dg/DfwseeDZ" +
             "M0QqTUilHlejkG3dOWNLTEvZy23c1p5rPM99fwdn28ja7u0rpfxQ2GI5Kr0ZJqGKf7pmND/HrSCRKSfNH3eVSXhNl6bJdKpgKA==";
 
-    public static final String TOKEN = "通过接口/缓存里面拿";
+    public static final String TOKEN = "0eca89d88244ec3ad734b0e58e23b2e2";
+
     @Test
     public void getTokenTest() {
 
@@ -76,7 +78,9 @@ class LinkFoxApplicationTests {
     public void promptToImage() {
         PromptToImageReq req = new PromptToImageReq();
         OpenClient client = getClient();
-        req.setContent(new PromptToImageReq.ContentDTO());
+        PromptToImageReq.ContentDTO contentDTO = new PromptToImageReq.ContentDTO();
+        contentDTO.setPrompt("a boxer on the ring");
+        req.setContent(contentDTO);
         req.setChatId("");
         CommonRequest request = new CommonRequest(PROMPT_TO_IMAGE, RequestMethod.POST_JSON);
         request.setBizContent(JSONObject.toJSONString(req));
@@ -97,7 +101,7 @@ class LinkFoxApplicationTests {
     public void promptToImageResult() {
 
         OnlyIdReq req = new OnlyIdReq();
-        req.setId(1L);
+        req.setId(101742L);
         CommonRequest request = new CommonRequest(PROMPT_TO_IMAGE_RESULT, RequestMethod.POST_JSON);
 
         request.setBizContent(JSONObject.toJSONString(req));
@@ -116,7 +120,89 @@ class LinkFoxApplicationTests {
         }
     }
 
+    @Test
+    public void imageToImage() {
+        CommonRequest request = new CommonRequest(IMAGE_TO_IMAGE, RequestMethod.POST_JSON);
+        ImageToImageReq req = new ImageToImageReq();
 
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            Object dataObj = response.getDataObj(Object.class);
+            String data = response.getData();
+            System.out.println(data);
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
+
+    @Test
+    public void imageToImageResult() {
+        CommonRequest request = new CommonRequest(IMAGE_TO_IMAGE_RESULT, RequestMethod.POST_JSON);
+        OnlyIdReq req = new OnlyIdReq();
+
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            Object dataObj = response.getDataObj(Object.class);
+            String data = response.getData();
+            System.out.println(data);
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
+
+    @Test
+    public void imageToPrompt() {
+        CommonRequest request = new CommonRequest(IMAGE_TO_PROMPT, RequestMethod.POST_JSON);
+        ImageToPromptReq req = new ImageToPromptReq();
+
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            Object dataObj = response.getDataObj(Object.class);
+            String data = response.getData();
+            System.out.println(data);
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
+
+    @Test
+    public void imageToPromptResult() {
+        CommonRequest request = new CommonRequest(IMAGE_TO_PROMPT_RESULT, RequestMethod.POST_JSON);
+        OnlyIdReq req = new OnlyIdReq();
+
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            Object dataObj = response.getDataObj(Object.class);
+            String data = response.getData();
+            System.out.println(data);
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
 
     private OpenClient getClient() {
         return new OpenClient(proxyUrl, appId, privateKeyIsv);

@@ -1,5 +1,6 @@
 package com.example.linkfox.req;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
-public class ImageToImageReq {
+public class ImageToPromptReq {
 
     @JsonProperty("content")
     private ContentDTO content;
@@ -18,16 +19,6 @@ public class ImageToImageReq {
     public static class ContentDTO {
         @JsonProperty("images")
         private List<ImagesDTO> images;
-        @JsonProperty("weight")
-        private String weight;
-        @JsonProperty("ratioStr")
-        private String ratioStr;
-        @JsonProperty("style")
-        private String style;
-        @JsonProperty("prompt")
-        private String prompt;
-        @JsonProperty("quality")
-        private String quality;
 
         @NoArgsConstructor
         @Data
