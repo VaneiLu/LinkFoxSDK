@@ -21,7 +21,7 @@ public class ImageVariantReq {
         @JsonProperty("images")
         private List<ImagesDTO> images;
         @JsonProperty("action")
-        private String action;
+        private Integer action;
 
         @NoArgsConstructor
         @Data

@@ -1,10 +1,8 @@
 package com.example.linkfox;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.linkfox.req.ImageToImageReq;
-import com.example.linkfox.req.ImageToPromptReq;
-import com.example.linkfox.req.OnlyIdReq;
-import com.example.linkfox.req.PromptToImageReq;
+import com.example.linkfox.req.*;
+import com.example.linkfox.resp.*;
 import com.fzzixun.openapi.sdk.client.OpenClient;
 import com.fzzixun.openapi.sdk.common.RequestMethod;
 import com.fzzixun.openapi.sdk.request.AppTokenRequest;
@@ -13,11 +11,12 @@ import com.fzzixun.openapi.sdk.response.AppTokenResponse;
 import com.fzzixun.openapi.sdk.response.CommonResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 class LinkFoxApplicationTests {
-
-    public static final String APP_TOKEN = "d11c29138eb5775feeebd334e7a70184";
-
     public static final String PROMPT_TO_IMAGE = "/linkfox-ai/image/v1/chat/completion/create/1";
     public static final String PROMPT_TO_IMAGE_RESULT = "/linkfox-ai/image/v1/chat/completion/info/1";
 
@@ -25,6 +24,11 @@ class LinkFoxApplicationTests {
     public static final String IMAGE_TO_IMAGE_RESULT = "/linkfox-ai/image/v1/chat/completion/info/2";
     public static final String IMAGE_TO_PROMPT = "/linkfox-ai/image/v1/chat/completion/create/3";
     public static final String IMAGE_TO_PROMPT_RESULT = "/linkfox-ai/image/v1/chat/completion/info/3";
+    public static final String IMAGE_VARIANT = "/linkfox-ai/image/v1/chat/completion/create/4";
+    public static final String IMAGE_VARIANT_RESULT = "/linkfox-ai/image/v1/chat/completion/info/4";
+    public static final String IMAGE_UP_SAMPLE = "/linkfox-ai/image/v1/make/create/7";
+    public static final String IMAGE_UP_SAMPLE_RESULT = "/linkfox-ai/image/v1/make/info/7";
+
     public static final String proxyUrl = "https://redirect.sdspod.com/linkfox/";
     public static final String appId = "202311221176941619505655808";
     public static final String privateKeyIsv = "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCcDA" +
@@ -47,7 +51,7 @@ class LinkFoxApplicationTests {
             "/psslMudMUwKBgQDB1PKu9ue7WrJgs+P3BWORDOak1NlbzCqriGkiuOL4B4IDnqPbeBdkfmyH+D5B6dg/DfwseeDZ" +
             "M0QqTUilHlejkG3dOWNLTEvZy23c1p5rPM99fwdn28ja7u0rpfxQ2GI5Kr0ZJqGKf7pmND/HrSCRKSfNH3eVSXhNl6bJdKpgKA==";
 
-    public static final String TOKEN = "0eca89d88244ec3ad734b0e58e23b2e2";
+    public static final String TOKEN = "18db949ac1add284adf411d5f8efc06f";
 
     @Test
     public void getTokenTest() {
@@ -87,9 +91,9 @@ class LinkFoxApplicationTests {
         CommonResponse response = client.executeAppToken(request, TOKEN);
         if (response.isSuccess()) {
             // 请求成功，对返回结果进行处理
-            Object dataObj = response.getDataObj(Object.class);
-            String data = response.getData();
-            System.out.println(data);
+            PromptToImageResp dataObj = response.getDataObj(PromptToImageResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
+
         } else {
             // 请求失败，对返回结果进行处理
             System.out.println(response.getBody());
@@ -101,7 +105,7 @@ class LinkFoxApplicationTests {
     public void promptToImageResult() {
 
         OnlyIdReq req = new OnlyIdReq();
-        req.setId(101742L);
+        req.setId("101742");
         CommonRequest request = new CommonRequest(PROMPT_TO_IMAGE_RESULT, RequestMethod.POST_JSON);
 
         request.setBizContent(JSONObject.toJSONString(req));
@@ -110,9 +114,8 @@ class LinkFoxApplicationTests {
         CommonResponse response = client.executeAppToken(request, TOKEN);
         if (response.isSuccess()) {
             // 请求成功，对返回结果进行处理
-            Object dataObj = response.getDataObj(Object.class);
-            String data = response.getData();
-            System.out.println(data);
+            PromptToImageResultResp dataObj = response.getDataObj(PromptToImageResultResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
         } else {
             // 请求失败，对返回结果进行处理
             System.out.println(response.getBody());
@@ -124,16 +127,24 @@ class LinkFoxApplicationTests {
     public void imageToImage() {
         CommonRequest request = new CommonRequest(IMAGE_TO_IMAGE, RequestMethod.POST_JSON);
         ImageToImageReq req = new ImageToImageReq();
-
+        ImageToImageReq.ContentDTO contentDTO = new ImageToImageReq.ContentDTO();
+        List<ImageToImageReq.ContentDTO.ImagesDTO> imagesList = new ArrayList<>();
+        ImageToImageReq.ContentDTO.ImagesDTO imagesDTO = new ImageToImageReq.ContentDTO.ImagesDTO();
+        imagesDTO.setUrl("https://tse4-mm.cn.bing.net/th/id/OIP-C.r4I2abQvGMup_fx42SU5egHaEo?rs=1&pid=ImgDetMain");
+        imagesList.add(imagesDTO);
+        contentDTO.setImages(imagesList);
+        contentDTO.setPrompt("cute puppy");
+        contentDTO.setWeight("1");
+        contentDTO.setRatioStr("494:296");
+        req.setContent(contentDTO);
         request.setBizContent(JSONObject.toJSONString(req));
         OpenClient client = getClient();
 
         CommonResponse response = client.executeAppToken(request, TOKEN);
         if (response.isSuccess()) {
             // 请求成功，对返回结果进行处理
-            Object dataObj = response.getDataObj(Object.class);
-            String data = response.getData();
-            System.out.println(data);
+            ImageToImageResp dataObj = response.getDataObj(ImageToImageResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
         } else {
             // 请求失败，对返回结果进行处理
             System.out.println(response.getBody());
@@ -145,16 +156,16 @@ class LinkFoxApplicationTests {
     public void imageToImageResult() {
         CommonRequest request = new CommonRequest(IMAGE_TO_IMAGE_RESULT, RequestMethod.POST_JSON);
         OnlyIdReq req = new OnlyIdReq();
-
+        req.setId("104006");
         request.setBizContent(JSONObject.toJSONString(req));
         OpenClient client = getClient();
 
         CommonResponse response = client.executeAppToken(request, TOKEN);
         if (response.isSuccess()) {
             // 请求成功，对返回结果进行处理
-            Object dataObj = response.getDataObj(Object.class);
-            String data = response.getData();
-            System.out.println(data);
+            ImageToImageResultResp dataObj = response.getDataObj(ImageToImageResultResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
+
         } else {
             // 请求失败，对返回结果进行处理
             System.out.println(response.getBody());
@@ -166,16 +177,20 @@ class LinkFoxApplicationTests {
     public void imageToPrompt() {
         CommonRequest request = new CommonRequest(IMAGE_TO_PROMPT, RequestMethod.POST_JSON);
         ImageToPromptReq req = new ImageToPromptReq();
-
+        ImageToPromptReq.ContentDTO.ImagesDTO imagesDTO = new ImageToPromptReq.ContentDTO.ImagesDTO();
+        ImageToPromptReq.ContentDTO contentDTO = new ImageToPromptReq.ContentDTO();
+        imagesDTO.setUrl("https://tse4-mm.cn.bing.net/th/id/OIP-C.r4I2abQvGMup_fx42SU5egHaEo?rs=1&pid=ImgDetMain");
+        contentDTO.setImages(Collections.singletonList(imagesDTO));
+        req.setContent(contentDTO);
         request.setBizContent(JSONObject.toJSONString(req));
         OpenClient client = getClient();
 
         CommonResponse response = client.executeAppToken(request, TOKEN);
         if (response.isSuccess()) {
             // 请求成功，对返回结果进行处理
-            Object dataObj = response.getDataObj(Object.class);
-            String data = response.getData();
-            System.out.println(data);
+            ImageToPromptResp dataObj = response.getDataObj(ImageToPromptResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
+
         } else {
             // 请求失败，对返回结果进行处理
             System.out.println(response.getBody());
@@ -187,16 +202,105 @@ class LinkFoxApplicationTests {
     public void imageToPromptResult() {
         CommonRequest request = new CommonRequest(IMAGE_TO_PROMPT_RESULT, RequestMethod.POST_JSON);
         OnlyIdReq req = new OnlyIdReq();
-
+        req.setId("103674");
         request.setBizContent(JSONObject.toJSONString(req));
         OpenClient client = getClient();
 
         CommonResponse response = client.executeAppToken(request, TOKEN);
         if (response.isSuccess()) {
             // 请求成功，对返回结果进行处理
-            Object dataObj = response.getDataObj(Object.class);
-            String data = response.getData();
-            System.out.println(data);
+            ImageToPromptResultResp dataObj = response.getDataObj(ImageToPromptResultResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
+
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
+
+    @Test
+    public void imageVariant() {
+        CommonRequest request = new CommonRequest(IMAGE_VARIANT, RequestMethod.POST_JSON);
+        ImageVariantReq req = new ImageVariantReq();
+        ImageVariantReq.ContentDTO.ImagesDTO imagesDTO = new ImageVariantReq.ContentDTO.ImagesDTO();
+        ImageVariantReq.ContentDTO contentDTO = new ImageVariantReq.ContentDTO();
+        contentDTO.setAction(1);
+        imagesDTO.setId("684394");
+        imagesDTO.setUrl("https://linkfoxai-ailab-prod.oss-cn-shenzhen.aliyuncs.com/IMAGE_CHAT_IMAGE_TO_IMAGE/0/2023/12/20/154820437907_2577ad569f0c11ee959a00163e1498fe_upsample_4.jpg?Expires=1703087395&OSSAccessKeyId=LTAI5tQMD3UtDGPmMJRik6JA&Signature=20BQt7a%2FCCILLVHp3%2FO5QNRH2QM%3D");
+        contentDTO.setImages(Collections.singletonList(imagesDTO));
+        req.setContent(contentDTO);
+        req.setChatId("8026");
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            ImageVariantResp dataObj = response.getDataObj(ImageVariantResp.class);
+            JSONObject.toJSONString(dataObj);
+
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
+
+    @Test
+    public void imageVariantResult() {
+        CommonRequest request = new CommonRequest(IMAGE_VARIANT_RESULT, RequestMethod.POST_JSON);
+        OnlyIdReq req = new OnlyIdReq();
+        req.setId("104012");
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            ImageVariantResultResp dataObj = response.getDataObj(ImageVariantResultResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
+
+    @Test
+    public void upSample() {
+        CommonRequest request = new CommonRequest(IMAGE_UP_SAMPLE, RequestMethod.POST_JSON);
+        UpSampleReq req = new UpSampleReq();
+        UpSampleReq.ExtendFieldsDTO extendFieldsDTO = new UpSampleReq.ExtendFieldsDTO();
+        extendFieldsDTO.setMagnification("2");
+        req.setOutputNum("1");
+        req.setImageUrl("https://linkfoxai-ailab-prod.oss-cn-shenzhen.aliyuncs.com/IMAGE_CHAT_IMAGE_ACTION/0/2023/12/20/155114505663_8cc2b35c9f0c11ee959a00163e1498fe_upsample_4.jpg?Expires=1703087544&OSSAccessKeyId=LTAI5tQMD3UtDGPmMJRik6JA&Signature=4%2BkBiTrRuO72B%2BPZE1yIe86OZAY%3D");
+        req.setExtendFields(extendFieldsDTO);
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            UpSampeResp dataObj = response.getDataObj(UpSampeResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
+
+        } else {
+            // 请求失败，对返回结果进行处理
+            System.out.println(response.getBody());
+            System.out.println(response.getErrorMsg());
+        }
+    }
+
+    @Test
+    public void upSampleResult() {
+        CommonRequest request = new CommonRequest(IMAGE_UP_SAMPLE_RESULT, RequestMethod.POST_JSON);
+        OnlyIdReq req = new OnlyIdReq();
+        req.setId("193846");
+        request.setBizContent(JSONObject.toJSONString(req));
+        OpenClient client = getClient();
+        CommonResponse response = client.executeAppToken(request, TOKEN);
+        if (response.isSuccess()) {
+            // 请求成功，对返回结果进行处理
+            UpSampleResultResp dataObj = response.getDataObj(UpSampleResultResp.class);
+            System.out.println(JSONObject.toJSONString(dataObj));
         } else {
             // 请求失败，对返回结果进行处理
             System.out.println(response.getBody());

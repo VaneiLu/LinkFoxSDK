@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class OnlyIdReq {
-    private Long id;
+    private String id;
 }
