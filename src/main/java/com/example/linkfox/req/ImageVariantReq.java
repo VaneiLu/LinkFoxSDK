@@ -28,8 +28,6 @@ public class ImageVariantReq {
         public static class ImagesDTO {
             @JsonProperty("id")
             private String id;
-            @JsonProperty("url")
-            private String url;
         }
     }
 }

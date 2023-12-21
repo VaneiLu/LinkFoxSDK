@@ -51,7 +51,7 @@ class LinkFoxApplicationTests {
             "/psslMudMUwKBgQDB1PKu9ue7WrJgs+P3BWORDOak1NlbzCqriGkiuOL4B4IDnqPbeBdkfmyH+D5B6dg/DfwseeDZ" +
             "M0QqTUilHlejkG3dOWNLTEvZy23c1p5rPM99fwdn28ja7u0rpfxQ2GI5Kr0ZJqGKf7pmND/HrSCRKSfNH3eVSXhNl6bJdKpgKA==";
 
-    public static final String TOKEN = "18db949ac1add284adf411d5f8efc06f";
+    public static final String TOKEN = "69eb54c19a68fd6e3f7986e381160a8e";
 
     @Test
     public void getTokenTest() {
@@ -227,7 +227,6 @@ class LinkFoxApplicationTests {
         ImageVariantReq.ContentDTO contentDTO = new ImageVariantReq.ContentDTO();
         contentDTO.setAction(1);
         imagesDTO.setId("684394");
-        imagesDTO.setUrl("https://linkfoxai-ailab-prod.oss-cn-shenzhen.aliyuncs.com/IMAGE_CHAT_IMAGE_TO_IMAGE/0/2023/12/20/154820437907_2577ad569f0c11ee959a00163e1498fe_upsample_4.jpg?Expires=1703087395&OSSAccessKeyId=LTAI5tQMD3UtDGPmMJRik6JA&Signature=20BQt7a%2FCCILLVHp3%2FO5QNRH2QM%3D");
         contentDTO.setImages(Collections.singletonList(imagesDTO));
         req.setContent(contentDTO);
         req.setChatId("8026");
@@ -250,7 +249,7 @@ class LinkFoxApplicationTests {
     public void imageVariantResult() {
         CommonRequest request = new CommonRequest(IMAGE_VARIANT_RESULT, RequestMethod.POST_JSON);
         OnlyIdReq req = new OnlyIdReq();
-        req.setId("104012");
+        req.setId("104580");
         request.setBizContent(JSONObject.toJSONString(req));
         OpenClient client = getClient();
         CommonResponse response = client.executeAppToken(request, TOKEN);
