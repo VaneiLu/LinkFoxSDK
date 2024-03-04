@@ -34,8 +34,6 @@ public class UpSampleResultResp {
         private Integer subType;
         @JsonProperty("status")
         private Integer status;
-        @JsonProperty("planId")
-        private Integer planId;
         @JsonProperty("prompt")
         private String prompt;
         @JsonProperty("promptTranslation")
@@ -63,11 +61,11 @@ public class UpSampleResultResp {
         @JsonProperty("drawCount")
         private Integer drawCount;
         @JsonProperty("expireTime")
-        private Integer expireTime;
+        private Long expireTime;
         @JsonProperty("createTime")
-        private Integer createTime;
+        private Long createTime;
         @JsonProperty("updateTime")
-        private Integer updateTime;
+        private Long updateTime;
 
         @NoArgsConstructor
         @Data
@@ -79,14 +77,8 @@ public class UpSampleResultResp {
         @NoArgsConstructor
         @Data
         public static class ResultListDTO {
-            @JsonProperty("teamId")
-            private Integer teamId;
-            @JsonProperty("userId")
-            private Long userId;
             @JsonProperty("id")
-            private Integer id;
-            @JsonProperty("imageMakeId")
-            private Integer imageMakeId;
+            private Long id;
             @JsonProperty("status")
             private Integer status;
             @JsonProperty("errorCode")
@@ -109,16 +101,10 @@ public class UpSampleResultResp {
             private Integer size;
             @JsonProperty("downloadFlag")
             private Boolean downloadFlag;
-            @JsonProperty("downloadUserId")
-            private Integer downloadUserId;
             @JsonProperty("downloadTime")
             private Integer downloadTime;
             @JsonProperty("count")
             private Integer count;
-            @JsonProperty("planId")
-            private Integer planId;
-            @JsonProperty("createTime")
-            private Integer createTime;
         }
     }
 }
